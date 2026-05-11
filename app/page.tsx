@@ -20,16 +20,10 @@ export default function Home() {
         Fotoğrafınızı yükleyin, avatarınızı seçin — drone efektli profesyonel tanıtım videosunu biz üretelim.
       </p>
 
-      {/* CTA'lar */}
-      <div className="flex flex-col sm:flex-row gap-3">
-        <Link href="/siparis" className="btn-primary px-8 py-3 text-base">
-          Sipariş Ver →
-        </Link>
-        <Link href="/panel/login"
-          className="btn-ghost px-8 py-3 text-base">
-          Ajans Girişi
-        </Link>
-      </div>
+      {/* CTA */}
+      <Link href="/siparis" className="btn-primary px-10 py-3 text-base">
+        Sipariş Ver →
+      </Link>
 
       {/* Footer */}
       <p className="mt-16 text-xs" style={{ color: "var(--ad-subtle)" }}>
