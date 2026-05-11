@@ -1,11 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { FormEvent, useState } from "react";
+import { FormEvent, Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
-export default function LoginClient() {
+// useSearchParams() Suspense boundary gerektiriyor (Next.js 16)
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") ?? "/panel";
@@ -35,6 +36,50 @@ export default function LoginClient() {
   };
 
   return (
+    <form onSubmit={handleSubmit} className="card p-6 space-y-4">
+      <div>
+        <label className="block text-xs font-medium mb-1.5" style={{ color: "var(--ad-muted)" }}>
+          E-posta
+        </label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          className="input-ad"
+          placeholder="ajans@arsadrone.com"
+        />
+      </div>
+
+      <div>
+        <label className="block text-xs font-medium mb-1.5" style={{ color: "var(--ad-muted)" }}>
+          Şifre
+        </label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          className="input-ad"
+        />
+      </div>
+
+      {error && (
+        <div className="rounded-lg px-3 py-2 text-sm"
+          style={{ background: "color-mix(in srgb, var(--ad-red) 10%, transparent)", border: "1px solid color-mix(in srgb, var(--ad-red) 25%, transparent)", color: "var(--ad-red)" }}>
+          {error}
+        </div>
+      )}
+
+      <button type="submit" disabled={loading} className="btn-primary w-full mt-2">
+        {loading ? "Giriş yapılıyor..." : "Giriş Yap"}
+      </button>
+    </form>
+  );
+}
+
+export default function LoginClient() {
+  return (
     <main className="min-h-screen bg-ad-bg flex items-center justify-center px-4">
       <div className="max-w-sm w-full">
 
@@ -49,46 +94,13 @@ export default function LoginClient() {
           </span>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="card p-6 space-y-4">
-          <div>
-            <label className="block text-xs font-medium mb-1.5" style={{ color: "var(--ad-muted)" }}>
-              E-posta
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="input-ad"
-              placeholder="ajans@raraprojects.com"
-            />
+        <Suspense fallback={
+          <div className="card p-6 flex items-center justify-center h-48">
+            <span className="text-sm animate-pulse" style={{ color: "var(--ad-muted)" }}>Yükleniyor...</span>
           </div>
-
-          <div>
-            <label className="block text-xs font-medium mb-1.5" style={{ color: "var(--ad-muted)" }}>
-              Şifre
-            </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="input-ad"
-            />
-          </div>
-
-          {error && (
-            <div className="rounded-lg px-3 py-2 text-sm"
-              style={{ background: "color-mix(in srgb, var(--ad-red) 10%, transparent)", border: "1px solid color-mix(in srgb, var(--ad-red) 25%, transparent)", color: "var(--ad-red)" }}>
-              {error}
-            </div>
-          )}
-
-          <button type="submit" disabled={loading} className="btn-primary w-full mt-2">
-            {loading ? "Giriş yapılıyor..." : "Giriş Yap"}
-          </button>
-        </form>
+        }>
+          <LoginForm />
+        </Suspense>
 
       </div>
     </main>
