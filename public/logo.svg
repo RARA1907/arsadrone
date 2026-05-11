@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48" fill="none">
+  <!-- Drone icon: 4 arms + rotors -->
+  <!-- Center body -->
+  <rect x="18" y="18" width="12" height="12" rx="2" fill="#F97316"/>
+  <!-- Arms -->
+  <line x1="24" y1="18" x2="11" y2="8"  stroke="#F97316" stroke-width="2" stroke-linecap="round"/>
+  <line x1="36" y1="18" x2="37" y2="8"  stroke="#F97316" stroke-width="2" stroke-linecap="round"/>
+  <line x1="24" y1="30" x2="11" y2="40" stroke="#F97316" stroke-width="2" stroke-linecap="round"/>
+  <line x1="36" y1="30" x2="37" y2="40" stroke="#F97316" stroke-width="2" stroke-linecap="round"/>
+  <!-- Rotors -->
+  <circle cx="9"  cy="7"  r="5" fill="none" stroke="#F97316" stroke-width="1.5"/>
+  <circle cx="39" cy="7"  r="5" fill="none" stroke="#F97316" stroke-width="1.5"/>
+  <circle cx="9"  cy="41" r="5" fill="none" stroke="#F97316" stroke-width="1.5"/>
+  <circle cx="39" cy="41" r="5" fill="none" stroke="#F97316" stroke-width="1.5"/>
+  <!-- Rotor dots (filled) -->
+  <circle cx="9"  cy="7"  r="2" fill="#F97316"/>
+  <circle cx="39" cy="7"  r="2" fill="#F97316"/>
+  <circle cx="9"  cy="41" r="2" fill="#F97316"/>
+  <circle cx="39" cy="41" r="2" fill="#F97316"/>
+  <!-- Wordmark -->
+  <text x="56" y="31" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="400" fill="#F9FAFB" letter-spacing="-0.3">Arsa</text>
+  <text x="97" y="31" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="700" fill="#F9FAFB" letter-spacing="-0.3">Drone</text>
+</svg>
