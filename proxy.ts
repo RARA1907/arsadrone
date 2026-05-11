@@ -1,12 +1,12 @@
 /**
- * Next.js middleware — /panel rotalarını korur.
+ * Next.js 16 proxy (formerly middleware) — /panel rotalarını korur.
  * Supabase session cookie yoksa /panel/login'e yönlendirir.
  */
 import { NextRequest, NextResponse } from "next/server";
 
 const PROTECTED = /^\/panel(?!\/login)/;
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   if (!PROTECTED.test(pathname)) {
@@ -14,7 +14,6 @@ export function middleware(req: NextRequest) {
   }
 
   // Supabase session cookie kontrolü
-  // Cookie ismi: sb-<project-ref>-auth-token (veya supabase-auth-token)
   const hasCookie =
     Array.from(req.cookies.getAll()).some(
       (c) => c.name.startsWith("sb-") && c.name.endsWith("-auth-token"),
