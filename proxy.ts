@@ -1,32 +1,45 @@
 /**
- * Next.js 16 proxy (formerly middleware) — /panel rotalarını korur.
- * Supabase session cookie yoksa /panel/login'e yönlendirir.
+ * Next.js 16 proxy (middleware) — /panel rotalarını korur.
+ * @supabase/ssr createServerClient ile cookie-based session doğrulaması.
  */
 import { NextRequest, NextResponse } from "next/server";
+import { createServerClient } from "@supabase/ssr";
 
 const PROTECTED = /^\/panel(?!\/login)/;
 
-export function proxy(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   if (!PROTECTED.test(pathname)) {
     return NextResponse.next();
   }
 
-  // Supabase session cookie kontrolü
-  const hasCookie =
-    Array.from(req.cookies.getAll()).some(
-      (c) => c.name.startsWith("sb-") && c.name.endsWith("-auth-token"),
-    ) ||
-    req.cookies.has("supabase-auth-token");
+  const res = NextResponse.next();
 
-  if (!hasCookie) {
+  // @supabase/ssr: cookie-based session okuma
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll: () => req.cookies.getAll(),
+        setAll: (cookies) => {
+          cookies.forEach(({ name, value, options }) => {
+            res.cookies.set(name, value, options);
+          });
+        },
+      },
+    },
+  );
+
+  const { data: { session } } = await supabase.auth.getSession();
+
+  if (!session) {
     const loginUrl = new URL("/panel/login", req.url);
-    loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
-  return NextResponse.next();
+  return res;
 }
 
 export const config = {

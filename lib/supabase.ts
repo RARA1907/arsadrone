@@ -1,21 +1,13 @@
 /**
- * Supabase client — Next.js 16 App Router uyumlu
+ * Supabase client — Next.js 16 App Router + @supabase/ssr
  *
- * Faz 1'de Supabase doğrudan frontend'den kullanılmıyor;
- * tüm işlemler FastAPI üzerinden.
- * Bu modül ileride auth eklendiğinde kullanılacak.
+ * createBrowserClient: cookie-based session → middleware ile uyumlu
+ * createClient (eski): localStorage-based → middleware cookie göremez
  */
-import { createClient } from "@supabase/supabase-js";
+import { createBrowserClient } from "@supabase/ssr";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseUrl  = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  // Build-time warning — runtime'da env eksikse app çalışmaz
-  if (typeof window !== "undefined") {
-    console.warn("[ArsaDrone] NEXT_PUBLIC_SUPABASE_URL veya NEXT_PUBLIC_SUPABASE_ANON_KEY eksik");
-  }
-}
-
-/** Browser-side singleton client (anon key — RLS korumalı) */
-export const supabase = createClient(supabaseUrl ?? "", supabaseAnonKey ?? "");
+/** Browser-side singleton — cookie'ye yazar, middleware okuyabilir */
+export const supabase = createBrowserClient(supabaseUrl, supabaseAnon);
