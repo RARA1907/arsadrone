@@ -3,7 +3,12 @@
  * Backend: FastAPI @ NEXT_PUBLIC_API_URL
  */
 
-const BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+// Turbopack env var injection sorunu — production URL hardcode
+const BASE =
+  process.env.NEXT_PUBLIC_API_URL ||
+  (typeof window !== "undefined" && window.location.hostname !== "localhost"
+    ? "https://arsadrone-api-production-a42e.up.railway.app"
+    : "http://localhost:8000");
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
